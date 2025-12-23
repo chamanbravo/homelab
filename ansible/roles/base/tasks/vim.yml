@@ -1,0 +1,5 @@
+- name: Copy .vimrc
+  become: false
+  copy:
+    src: files/.vimrc
+    dest: "{{user_home}}"

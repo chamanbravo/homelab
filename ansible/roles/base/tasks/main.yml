@@ -1,0 +1,14 @@
+- name: Update system
+  apt:
+    update_cache: true
+    upgrade: dist
+
+- name: Install basic packages
+  apt:
+    name:
+      - curl
+      - git
+      - htop
+    state: present
+
+- include_tasks: vim.yml
