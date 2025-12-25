@@ -3,24 +3,13 @@ kind: Namespace
 metadata:
   name: upstat
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-data
-  namespace: upstat
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: postgres
   namespace: upstat
 spec:
+  serviceName: postgres
   replicas: 1
   selector:
     matchLabels:
@@ -37,9 +26,15 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: upstat
+              valueFrom:
+                secretKeyRef:
+                  name: upstat-secret
+                  key: POSTGRES_DB
             - name: POSTGRES_PASSWORD
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: upstat-secret
+                  key: POSTGRES_PASSWORD
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
@@ -48,10 +43,14 @@ spec:
               command: ["pg_isready", "-U", "postgres"]
             initialDelaySeconds: 5
             periodSeconds: 5
-      volumes:
-        - name: postgres-data
-          persistentVolumeClaim:
-            claimName: postgres-data
+  volumeClaimTemplate:
+    - metadata:
+        name: data
+      spec:
+        accessMode: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -89,9 +88,15 @@ spec:
             - name: DB_TYPE
               value: postgres
             - name: POSTGRES_DSN
-              value: -
+              valueFrom:
+                secretKeyRef:
+                  name: upstat-secret
+                  key: POSTGRES_DSN
             - name: JWT_SECRET_KEY
-              value: -
+              valueFrom:
+                secretKeyRef:
+                  name: upstat-secret
+                  key: JWT_SECRET_KEY
 ---
 apiVersion: v1
 kind: Service
@@ -136,6 +141,24 @@ spec:
   selector:
     app: web
   ports:
-    - port: 3000
+    - port: 80
       targetPort: 3000
-      nodePort: 30000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: upstat-ingress
+  namespace: upstat
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: upstat.chamanbudhathoki.com.np
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: upstat-web
+                port:
+                  number: 80
