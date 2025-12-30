@@ -64,7 +64,7 @@ The applications that run in my homelab (listed in alphabetical order)
     </tr>
     <tr>
         <td><img vertical-align=baseline width="32" src="https://raw.githubusercontent.com/chamanbravo/upstat/main/docs/assets/upstat.png"></td>
-        <td><a href="https://hub.docker.com/r/linuxserver/code-server">Upstat</a></td>
+        <td><a href="https://github.com/chamanbravo/upstat">Upstat</a></td>
         <td>Status monitoring tool</td>
     </tr>
 </table>
