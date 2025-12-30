@@ -1,0 +1,44 @@
+namespaceOverride: monitoring
+
+server:
+  persistentVolume:
+    enabled: true
+    size: 10Gi
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+  extraScrapeConfigs:
+    - job_name: blackbox-http
+      metrics_path: /probe
+      params:
+        module: [http_2xx]
+      static_configs:
+        - targets:
+            - https://google.com
+            - https://example.com
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: blackbox-blackbox-exporter.monitoring.svc.cluster.local:9115
+
+alertmanager:
+  enabled: false
+
+pushgateway:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+
