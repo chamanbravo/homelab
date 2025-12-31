@@ -5,6 +5,7 @@ metadata:
   name: upstat
   namespace: flux-system
 spec:
+  targetNamespace: upstat
   path: ./clusters/apps/upstat
   prune: true
   sourceRef:

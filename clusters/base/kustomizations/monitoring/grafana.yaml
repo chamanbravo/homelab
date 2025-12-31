@@ -5,6 +5,7 @@ metadata:
   name: grafana
   namespace: flux-system
 spec:
+  targetNamespace: monitoring
   path: ./clusters/apps/monitoring/grafana
   prune: true
   sourceRef:
