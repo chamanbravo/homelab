@@ -3,15 +3,12 @@
 </h1>
 
 <p align="center">
-  <a href="https://github.com/k8s-at-home" alt="Image used with permission from k8s-at-home"><img alt="Image used with permission from k8s-at-home" src="https://avatars.githubusercontent.com/u/61287648" /></a>
+  <img alt="k8s-at-home" src="https://avatars.githubusercontent.com/u/61287648" />
 </p>
 
 <p align="center">
   <a href="https://k3s.io/">
     <img alt="k3s" src="https://img.shields.io/badge/k3s-v1.34.1-orange?logo=kubernetes&logoColor=white&style=flat-square">
-  </a>
-  <a href="https://github.com/adityathebe/homelab/commits/master">
-    <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/chamanbravo/homelab?logo=git&logoColor=white&color=purple&style=flat-square">
   </a>
 </p>
 
@@ -66,5 +63,20 @@ The applications that run in my homelab (listed in alphabetical order)
         <td><img vertical-align=baseline width="32" src="https://raw.githubusercontent.com/chamanbravo/upstat/main/docs/assets/upstat.png"></td>
         <td><a href="https://github.com/chamanbravo/upstat">Upstat</a></td>
         <td>Status monitoring tool</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://grafana.com/static/img/menu/grafana2.svg"></td>
+        <td><a href="https://grafana.com">Grafana</a></td>
+        <td>Observability platform</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://avatars.githubusercontent.com/u/3380462"></td>
+        <td><a href="https://prometheus.io">Prometheus</a></td>
+        <td>Systems monitoring and alerting toolkit</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://ntfy.sh/_next/static/media/logo.077f6a13.svg"></td>
+        <td><a href="https://ntfy.sh">ntfy</a></td>
+        <td>Notification service to send notifications to your phone or desktop</td>
     </tr>
 </table>
