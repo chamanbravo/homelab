@@ -1,0 +1,65 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: prometheus
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      version: ">=25.0.0"
+  install:
+    createNamespace: false
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    namespaceOverride: monitoring
+
+    server:
+      persistentVolume:
+        enabled: true
+        size: 10Gi
+
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+
+      extraScrapeConfigs:
+        - job_name: blackbox-http
+          metrics_path: /probe
+          params:
+            module: [http_2xx]
+          static_configs:
+            - targets:
+                - https://google.com
+                - https://example.com
+          relabel_configs:
+            - source_labels: [__address__]
+              target_label: __param_target
+            - source_labels: [__param_target]
+              target_label: instance
+            - target_label: __address__
+              replacement: blackbox-blackbox-exporter.monitoring.svc.cluster.local:9115
+
+    alertmanager:
+      enabled: false
+
+    pushgateway:
+      enabled: false
+
+    kubeStateMetrics:
+      enabled: false
+
+    nodeExporter:
+      enabled: false

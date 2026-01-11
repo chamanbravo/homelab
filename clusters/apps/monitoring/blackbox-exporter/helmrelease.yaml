@@ -1,0 +1,51 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: blackbox
+  namespace: monitoring
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: prometheus-blackbox-exporter
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      version: ">=9.0.0"
+  install:
+    createNamespace: false
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    service:
+      type: ClusterIP
+      port: 9115
+
+    config:
+      modules:
+        http_2xx:
+          prober: http
+          timeout: 5s
+          http:
+            valid_status_codes: [200, 301, 302]
+            method: GET
+            preferred_ip_protocol: "ip4"
+
+        tcp_connect:
+          prober: tcp
+          timeout: 5s
+
+        icmp:
+          prober: icmp
+          timeout: 5s
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
