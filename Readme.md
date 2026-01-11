@@ -49,9 +49,9 @@ The core components of the cluster
     </tr>
 </table>
 
-### `cluster/apps`
+### `clusters/apps`
 
-The applications that run in my homelab (listed in alphabetical order)
+The applications that run in my homelab 
 
 <table>
     <tr>
