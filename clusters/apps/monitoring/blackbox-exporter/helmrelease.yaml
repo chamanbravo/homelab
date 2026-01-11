@@ -2,13 +2,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: blackbox
+  name: blackbox-exporter
   namespace: monitoring
 spec:
   interval: 10m
   chart:
     spec:
-      chart: prometheus-blackbox-exporter
+      chart: blackbox-exporter
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
